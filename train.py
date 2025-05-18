@@ -13,12 +13,10 @@ device = torch.device("cpu")
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
-
 batch_size = 128
 num_classes = 10
 learning_rate = 0.001
 epochs = 20
-
 
 transform_train = transforms.Compose([
     transforms.RandomHorizontalFlip(),
@@ -26,7 +24,6 @@ transform_train = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean, std)
 ])
-
 
 train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -66,11 +63,9 @@ class NeuralNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        # Create 4 layers of residual blocks
         self.layer1 = self._make_layer(BasicBlock, 64,  2, stride=1) 
         self.layer2 = self._make_layer(BasicBlock, 128, 2, stride=2)
         self.layer3 = self._make_layer(BasicBlock, 256, 2, stride=2)
-        #self.layer4 = self._make_layer(BasicBlock, 512, 2, stride=2)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(256 * block.expansion, num_classes)
@@ -100,7 +95,6 @@ class NeuralNet(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        #x = self.layer4(x)
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
@@ -110,7 +104,7 @@ class NeuralNet(nn.Module):
 
 criterion = nn.CrossEntropyLoss()
 
-model = NeuralNet(BasicBlock, [2, 2, 2, 2],num_classes=10).to(device) 
+model = NeuralNet(BasicBlock, [2, 2, 2],num_classes=10).to(device) 
 
 optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=5e-4)
 scheduler = StepLR(optimizer, step_size=10, gamma=0.5)
