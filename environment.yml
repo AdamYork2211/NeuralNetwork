@@ -1,5 +1,5 @@
 name: NeuralNetwork
 dependencies:
-	- python
-	- torchvision
-	- pytorch
+ - python
+ - torchvision
+ - pytorch
