@@ -28,22 +28,18 @@ transform_train = transforms.Compose([
 ])
 
 
-train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                             download=True, transform=transform_train)
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
-                                           shuffle=True)
+train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
                                            
 class BasicBlock(nn.Module):
     expansion = 1 
     def __init__(self, in_channels, out_channels, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3,
-                               stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(out_channels)
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3,
-                               stride=1, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(out_channels)
-        self.downsample = downsample  # Used if dimensions change
+        self.downsample = downsample  
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
@@ -61,12 +57,11 @@ class BasicBlock(nn.Module):
 
 
 class NeuralNet(nn.Module):
-    def __init__(self, block, layers, num_classes=10): #originally 1000
+    def __init__(self, block, layers, num_classes=10): 
         super(NeuralNet, self).__init__()
         self.in_channels = 64
         
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
-                               bias=False)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -82,8 +77,6 @@ class NeuralNet(nn.Module):
 
     def _make_layer(self, block, out_channels, blocks, stride):
         downsample = None
-
-        # If input and output dimensions differ, apply downsampling
         if stride != 1 or self.in_channels != out_channels * block.expansion:
             downsample = nn.Sequential(
                 nn.Conv2d(self.in_channels, out_channels * block.expansion,
@@ -120,7 +113,7 @@ criterion = nn.CrossEntropyLoss()
 model = NeuralNet(BasicBlock, [2, 2, 2, 2],num_classes=10).to(device) 
 
 optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=5e-4)
-scheduler = StepLR(optimizer, step_size=10, gamma=0.5)  # Halve LR every 10 epochs
+scheduler = StepLR(optimizer, step_size=10, gamma=0.5)
 
 for epoch in range(epochs):
     model.train()
