@@ -34,7 +34,7 @@ class BasicBlock(nn.Module):
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3,
                                stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(out_channels)
-        self.downsample = downsample  # Used if dimensions change
+        self.downsample = downsample  
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
@@ -50,7 +50,7 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
         return out
 class NeuralNet(nn.Module):
-    def __init__(self, block, layers, num_classes=10): #originally 1000
+    def __init__(self, block, layers, num_classes=10): 
         super(NeuralNet, self).__init__()
         self.in_channels = 64
         
@@ -60,7 +60,6 @@ class NeuralNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        # Create 4 layers of residual blocks
         self.layer1 = self._make_layer(BasicBlock, 64,  2, stride=1) 
         self.layer2 = self._make_layer(BasicBlock, 128, 2, stride=2)
         self.layer3 = self._make_layer(BasicBlock, 256, 2, stride=2)
@@ -72,7 +71,6 @@ class NeuralNet(nn.Module):
     def _make_layer(self, block, out_channels, blocks, stride):
         downsample = None
 
-        # If input and output dimensions differ, apply downsampling
         if stride != 1 or self.in_channels != out_channels * block.expansion:
             downsample = nn.Sequential(
                 nn.Conv2d(self.in_channels, out_channels * block.expansion,
@@ -108,12 +106,7 @@ criterion = nn.CrossEntropyLoss()
 device = torch.device("cpu") 
 model = NeuralNet(BasicBlock, [2, 2, 2, 2], num_classes=10).to(device)
 model.load_state_dict(torch.load('model.pth', map_location=device))
-
-# Set model to evaluation mode
 model.eval()
-
-# Load test dataset
-
 
 correct = 0
 total = 0
