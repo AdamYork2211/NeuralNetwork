@@ -31,7 +31,7 @@ transform_train = transforms.Compose([
 train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                              download=True, transform=transform_train)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
-                                           shuffle=True, num_workers=2)
+                                           shuffle=True)
                                            
 class BasicBlock(nn.Module):
     expansion = 1 
