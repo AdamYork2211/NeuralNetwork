@@ -19,20 +19,16 @@ transform_test = transforms.Compose([
     transforms.Normalize(mean,
                          std)
 ])
-test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                            download=True, transform=transform_test)
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128,
-                                          shuffle=True)
+test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=True)
 
 class BasicBlock(nn.Module):
     expansion = 1 
     def __init__(self, in_channels, out_channels, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3,
-                               stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(out_channels)
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3,
-                               stride=1, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(out_channels)
         self.downsample = downsample  
         self.relu = nn.ReLU(inplace=True)
@@ -54,8 +50,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.in_channels = 64
         
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
-                               bias=False)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
